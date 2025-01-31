@@ -8,10 +8,11 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates) {
+  onChange(selectedDates) {
     console.log(selectedDates[0]);
   },
 };
+flatpickr('#datetime-picker', options);
 
 function convertMs(ms) {
   const second = 1000;
@@ -27,11 +28,10 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-flatpickr('#datetime-picker', { options });
-const inputDate = document.querySelector('#datetime-picker');
-inputDate.addEventListener('input', () => {
-  let toDay = options.defaultDate;
-  let UserPickDate = new Date(inputDate.value);
-  UserPickDate.setHours(0, 0, 0, 0);
-  let timeLeft = convertMs(UserPickDate.getTime() - toDay.getTime());
-});
+const choose = selector => document.querySelector(selector);
+const inputDate = choose('#datetime-picker');
+const daysBlock = choose('[data-days]');
+const hoursBlock = choose('[data-hours]');
+const minutesBlock = choose('[data-minutes]');
+const secondsBlock = choose('[data-seconds]');
+const startButton = choose('[data-start]');
