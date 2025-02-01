@@ -3,13 +3,53 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+const choose = selector => document.querySelector(selector);
+const timerBox = {
+  days: choose('[data-days]'),
+  hours: choose('[data-hours]'),
+  minutes: choose('[data-minutes]'),
+  seconds: choose('[data-seconds]'),
+};
+const startButton = choose('[data-start]');
+let userTime = '';
+
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onChange(selectedDates) {
-    console.log(selectedDates[0]);
+    userTime = selectedDates[0].getTime();
+    if (userTime < Date.now()) {
+      iziToast.show({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+        color: '#EF4040',
+        titleColor: '#fff',
+        titleSize: '16px',
+        messageColor: '#fff',
+        messageSize: '16px',
+        iconUrl: '/img/error.svg',
+        position: 'topRight',
+        transitionIn: 'bounceInLeft',
+        closeOnClick: true,
+      });
+      startButton.setAttribute('disabled', true);
+    } else {
+      iziToast.show({
+        message: 'Your timer is ready to run',
+        color: '#03a14d',
+        titleColor: '#fff',
+        titleSize: '16px',
+        messageColor: '#fff',
+        messageSize: '16px',
+        iconUrl: '../img/done.svg',
+        position: 'topRight',
+        transitionIn: 'bounceInLeft',
+        closeOnClick: true,
+      });
+      startButton.removeAttribute('disabled');
+    }
   },
 };
 flatpickr('#datetime-picker', options);
@@ -28,10 +68,45 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-const choose = selector => document.querySelector(selector);
-const inputDate = choose('#datetime-picker');
-const daysBlock = choose('[data-days]');
-const hoursBlock = choose('[data-hours]');
-const minutesBlock = choose('[data-minutes]');
-const secondsBlock = choose('[data-seconds]');
-const startButton = choose('[data-start]');
+function addLeadingZero(timer) {
+  return Object.entries(timer).reduce((acc, [key, value]) => {
+    let str = value.toString();
+    acc[key] = str.length !== 2 ? str.padStart(2, '0') : str;
+    return acc;
+  }, {});
+}
+
+function addTimer(timer, htmlObj) {
+  Object.keys(htmlObj).forEach(key => {
+    htmlObj[key].textContent = timer[key];
+  });
+}
+
+startButton.addEventListener('click', () => {
+  let intervalID = startTimer();
+  function startTimer() {
+    return setInterval(() => {
+      let timer = convertMs(userTime - Date.now());
+      if (userTime - Date.now() <= 0) {
+        clearInterval(intervalID);
+        iziToast.show({
+          message: 'Time came out! Choose a new timer',
+          color: '#03a14d',
+          titleColor: '#fff',
+          titleSize: '16px',
+          messageColor: '#fff',
+          messageSize: '16px',
+          iconUrl: '../img/done.svg',
+          position: 'topRight',
+          transitionIn: 'bounceInLeft',
+          closeOnClick: true,
+        });
+
+        return;
+      }
+      let formatedTimer = addLeadingZero(timer);
+      addTimer(formatedTimer, timerBox);
+      startButton.setAttribute('disabled', true);
+    }, 1000);
+  }
+});
