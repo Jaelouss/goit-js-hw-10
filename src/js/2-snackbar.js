@@ -1,5 +1,7 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import doneIcon from '../img/done.svg';
+import errorIcon from '../img/error.svg';
 
 const form = document.querySelector('.form');
 
@@ -40,7 +42,7 @@ form.addEventListener('submit', event => {
         title: 'OK',
         message: `Fulfilled promise in ${userValue}ms`,
         color: '#59A10D',
-        iconUrl: '/img/done.svg',
+        iconUrl: doneIcon,
       });
     })
     .catch(() => {
@@ -49,7 +51,7 @@ form.addEventListener('submit', event => {
         title: 'Error',
         message: `Illegal operation in ${userValue}ms`,
         color: '#EF4040',
-        iconUrl: '/img/error.svg',
+        iconUrl: errorIcon,
       });
     });
 

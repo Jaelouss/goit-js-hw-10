@@ -2,6 +2,8 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import doneIcon from '../img/done.svg';
+import errorIcon from '../img/error.svg';
 
 const choose = selector => document.querySelector(selector);
 const timerBox = {
@@ -13,6 +15,16 @@ const timerBox = {
 const startButton = choose('[data-start]');
 let userTime = '';
 
+const iziToastOptions = {
+  titleColor: '#fff',
+  titleSize: '16px',
+  messageColor: '#fff',
+  messageSize: '16px',
+  position: 'topRight',
+  transitionIn: 'bounceInLeft',
+  closeOnClick: true,
+};
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -22,31 +34,20 @@ const options = {
     userTime = selectedDates[0].getTime();
     if (userTime < Date.now()) {
       iziToast.show({
+        ...iziToastOptions,
         title: 'Error',
         message: 'Please choose a date in the future',
         color: '#EF4040',
-        titleColor: '#fff',
-        titleSize: '16px',
-        messageColor: '#fff',
-        messageSize: '16px',
-        iconUrl: '/img/error.svg',
-        position: 'topRight',
-        transitionIn: 'bounceInLeft',
-        closeOnClick: true,
+        iconUrl: errorIcon,
       });
       startButton.setAttribute('disabled', true);
     } else {
       iziToast.show({
+        ...iziToastOptions,
+        title: 'OK',
         message: 'Your timer is ready to run',
         color: '#03a14d',
-        titleColor: '#fff',
-        titleSize: '16px',
-        messageColor: '#fff',
-        messageSize: '16px',
-        iconUrl: '../img/done.svg',
-        position: 'topRight',
-        transitionIn: 'bounceInLeft',
-        closeOnClick: true,
+        iconUrl: doneIcon,
       });
       startButton.removeAttribute('disabled');
     }
