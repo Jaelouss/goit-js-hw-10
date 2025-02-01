@@ -40,7 +40,7 @@ form.addEventListener('submit', event => {
         title: 'OK',
         message: `Fulfilled promise in ${userValue}ms`,
         color: '#59A10D',
-        iconUrl: '../img/done.svg',
+        iconUrl: '../public/img/done.svg',
       });
     })
     .catch(() => {
