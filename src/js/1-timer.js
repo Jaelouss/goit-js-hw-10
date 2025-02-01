@@ -13,6 +13,7 @@ const timerBox = {
   seconds: choose('[data-seconds]'),
 };
 const startButton = choose('[data-start]');
+const input = choose('#datetime-picker');
 let userTime = '';
 
 const iziToastOptions = {
@@ -30,7 +31,7 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onChange(selectedDates) {
+  onClose(selectedDates) {
     userTime = selectedDates[0].getTime();
     if (userTime < Date.now()) {
       iziToast.show({
@@ -102,12 +103,13 @@ startButton.addEventListener('click', () => {
           transitionIn: 'bounceInLeft',
           closeOnClick: true,
         });
-
+        input.removeAttribute('disabled');
         return;
       }
       let formatedTimer = addLeadingZero(timer);
       addTimer(formatedTimer, timerBox);
       startButton.setAttribute('disabled', true);
+      input.setAttribute('disabled', true);
     }, 1000);
   }
 });
