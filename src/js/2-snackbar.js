@@ -40,7 +40,7 @@ form.addEventListener('submit', event => {
         title: 'OK',
         message: `Fulfilled promise in ${userValue}ms`,
         color: '#59A10D',
-        iconUrl: '/img/done.svg',
+        iconUrl: '../img/done.svg',
       });
     })
     .catch(() => {
@@ -49,7 +49,7 @@ form.addEventListener('submit', event => {
         title: 'Error',
         message: `Illegal operation in ${userValue}ms`,
         color: '#EF4040',
-        iconUrl: '/img/error.svg',
+        iconUrl: '../img/error.svg',
       });
     });
 
